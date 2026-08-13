@@ -1,0 +1,81 @@
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+
+  background: #111827;
+  color: white;
+
+  padding: 24px 15px;
+
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 0 10px 35px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #2563eb;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.logo span {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 13px 15px;
+
+  border-radius: 8px;
+
+  color: #9ca3af;
+
+  text-decoration: none;
+
+  transition: 0.2s;
+}
+
+nav a:hover {
+  background: #1f2937;
+  color: white;
+}
+
+nav a.active {
+  background: #2563eb;
+  color: white;
+}
+
+nav a span {
+  width: 22px;
+}

@@ -1,0 +1,56 @@
+.navbar {
+  height: 75px;
+
+  background: white;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 30px;
+}
+
+.navbar h3 {
+  margin: 0 0 3px;
+
+  font-size: 18px;
+}
+
+.navbar p {
+  margin: 0;
+
+  color: #9ca3af;
+
+  font-size: 13px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.profile small {
+  display: block;
+
+  color: #9ca3af;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+}

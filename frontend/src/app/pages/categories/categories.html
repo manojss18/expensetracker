@@ -1,0 +1,126 @@
+<div class="categories-page">
+
+  <!-- Header -->
+  <div class="page-header">
+
+    <div>
+      <h1>Categories</h1>
+
+      <p>
+        Manage your expense categories
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- Add Category -->
+  <div class="add-category-card">
+
+    <h2>Add Category</h2>
+
+    <div class="add-category-form">
+
+      <input
+        type="text"
+        placeholder="Enter category name"
+        [(ngModel)]="newCategory"
+        (keyup.enter)="addCategory()"
+      />
+
+      <button
+        class="add-button"
+        type="button"
+        (click)="addCategory()">
+
+        + Add Category
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- Categories List -->
+  <div class="category-card">
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>Your Categories</h2>
+
+        <p>
+          {{ categories.length }} categories
+        </p>
+
+      </div>
+
+    </div>
+
+
+    @if (categories.length > 0) {
+
+      <div class="category-list">
+
+        @for (
+          category of categories;
+          track category.id
+        ) {
+
+          <div class="category-item">
+
+            <div class="category-info">
+
+              <div class="category-icon">
+                #
+              </div>
+
+              <span>
+                {{ category.name }}
+              </span>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="delete-button"
+              (click)="deleteCategory(category.id)">
+
+              Delete
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+    @else {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          #
+        </div>
+
+        <h3>
+          No categories yet
+        </h3>
+
+        <p>
+          Add your first category above.
+        </p>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

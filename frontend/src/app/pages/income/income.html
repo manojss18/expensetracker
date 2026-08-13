@@ -1,0 +1,437 @@
+<div class="income-page">
+
+  <!-- Header -->
+  <div class="page-header">
+
+    <div>
+      <h1>Income</h1>
+
+      <p>
+        Manage and track your income
+      </p>
+    </div>
+
+    <button
+      class="add-button"
+      (click)="openAddForm()">
+
+      + Add Income
+
+    </button>
+
+  </div>
+
+
+  <!-- Error -->
+  @if (errorMessage) {
+
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+
+  }
+
+
+  <!-- Summary -->
+  <div class="summary-card">
+
+    <div>
+      <span>Total Income</span>
+
+      <h2>
+        ₹{{ totalIncome | number:'1.0-0' }}
+      </h2>
+    </div>
+
+    <div class="summary-icon">
+      ₹
+    </div>
+
+  </div>
+
+
+  <!-- Filters -->
+  <div class="filters">
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        placeholder="Search income..."
+        [(ngModel)]="searchText">
+
+    </div>
+
+
+    <div class="source-filter">
+
+      <select
+        [(ngModel)]="selectedSource">
+
+        <option value="All">
+          All Sources
+        </option>
+
+        @for (source of sources; track source) {
+
+          <option [value]="source">
+            {{ source }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- Income Table -->
+  <div class="table-card">
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>All Income</h2>
+
+        <p>
+          {{ filteredIncome.length }} transactions
+        </p>
+
+      </div>
+
+    </div>
+
+
+    @if (loading) {
+
+      <div class="loading">
+        Loading income...
+      </div>
+
+    }
+
+
+    @else if (filteredIncome.length > 0) {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Source</th>
+
+              <th>Description</th>
+
+              <th>Date</th>
+
+              <th>Amount</th>
+
+              <th>Actions</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              income of filteredIncome;
+              track income.id
+            ) {
+
+              <tr>
+
+                <!-- Source -->
+
+                <td>
+
+                  <div class="income-name">
+
+                    <div class="income-icon">
+                      ₹
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ income.source }}
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- Description -->
+
+                <td>
+
+                  <span class="description">
+
+                    {{ income.description || 'No description' }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- Date -->
+
+                <td>
+
+                  <span class="date">
+
+                    {{ income.incomeDate | date:'dd MMM yyyy' }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- Amount -->
+
+                <td>
+
+                  <strong class="amount">
+
+                    + ₹{{ income.amount | number:'1.0-0' }}
+
+                  </strong>
+
+                </td>
+
+
+                <!-- Actions -->
+
+                <td>
+
+                  <div class="actions">
+
+                    <button
+                      class="edit-button"
+                      (click)="editIncome(income)">
+
+                      Edit
+
+                    </button>
+
+                    <button
+                      class="delete-button"
+                      (click)="deleteIncome(income.id)">
+
+                      Delete
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+
+    @else {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ₹
+        </div>
+
+        <h3>
+          No income found
+        </h3>
+
+        <p>
+          Add your first income transaction.
+        </p>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+
+<!-- Add/Edit Modal -->
+
+@if (showForm) {
+
+  <div class="modal-backdrop">
+
+    <div class="modal">
+
+
+      <!-- Modal Header -->
+
+      <div class="modal-header">
+
+        <div>
+
+          <h2>
+
+            @if (editingId !== null) {
+              Edit Income
+            }
+            @else {
+              Add Income
+            }
+
+          </h2>
+
+          <p>
+            Enter your income details
+          </p>
+
+        </div>
+
+
+        <button
+          class="close-button"
+          (click)="closeForm()">
+
+          ×
+
+        </button>
+
+      </div>
+
+
+      <!-- Form -->
+
+      <div class="form">
+
+
+        <!-- Source -->
+
+        <div class="form-group">
+
+          <label>
+            Income Source
+          </label>
+
+          <select
+            [(ngModel)]="form.source">
+
+            @for (source of sources; track source) {
+
+              <option [value]="source">
+                {{ source }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- Amount -->
+
+        <div class="form-group">
+
+          <label>
+            Amount
+          </label>
+
+          <input
+            type="number"
+            min="1"
+            placeholder="Enter amount"
+            [(ngModel)]="form.amount">
+
+        </div>
+
+
+        <!-- Date -->
+
+        <div class="form-group">
+
+          <label>
+            Income Date
+          </label>
+
+          <input
+            type="date"
+            [(ngModel)]="form.incomeDate">
+
+        </div>
+
+
+        <!-- Description -->
+
+        <div class="form-group">
+
+          <label>
+            Description
+          </label>
+
+          <textarea
+            rows="3"
+            placeholder="Optional description"
+            [(ngModel)]="form.description">
+          </textarea>
+
+        </div>
+
+
+        <!-- Form Buttons -->
+
+        <div class="form-actions">
+
+          <button
+            class="cancel-button"
+            (click)="closeForm()">
+
+            Cancel
+
+          </button>
+
+
+          <button
+            class="save-button"
+            (click)="saveIncome()"
+            [disabled]="loading">
+
+            @if (loading) {
+              Saving...
+            }
+            @else if (editingId !== null) {
+              Update Income
+            }
+            @else {
+              Save Income
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

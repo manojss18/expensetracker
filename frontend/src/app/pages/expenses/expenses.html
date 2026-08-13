@@ -1,0 +1,501 @@
+<div class="expenses-page">
+
+  <!-- =====================================
+       PAGE HEADER
+  ====================================== -->
+
+  <div class="page-header">
+
+    <div>
+      <h1>Expenses</h1>
+
+      <p>
+        Track and manage your expenses
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="add-button"
+      (click)="openAddForm()">
+
+      + Add Expense
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================
+       SUMMARY CARD
+  ====================================== -->
+
+  <div class="summary-card">
+
+    <div class="summary-content">
+
+      <span class="summary-label">
+        Total Expenses
+      </span>
+
+      <h2>
+        ₹{{ totalExpenses | number:'1.0-0' }}
+      </h2>
+
+      <p>
+        Total of filtered expenses
+      </p>
+
+    </div>
+
+    <div class="summary-icon">
+      ↓
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       SEARCH + FILTER
+  ====================================== -->
+
+  <div class="filter-card">
+
+    <!-- Search -->
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        placeholder="Search expenses..."
+        [(ngModel)]="searchText"
+        name="searchText"
+      />
+
+    </div>
+
+
+    <!-- Category Filter -->
+
+    <div class="category-filter">
+
+      <select
+        [(ngModel)]="selectedCategory"
+        name="filterCategory">
+
+        <option value="All">
+          All Categories
+        </option>
+
+        @for (
+          category of categories;
+          track category.id
+        ) {
+
+          <option
+            [value]="category.name">
+
+            {{ category.name }}
+
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       EXPENSE LIST CARD
+  ====================================== -->
+
+  <div class="expenses-card">
+
+    <!-- Section Header -->
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          All Expenses
+        </h2>
+
+        <p>
+          Your expense transactions
+        </p>
+
+      </div>
+
+      <span class="expense-count">
+        {{ filteredExpenses.length }}
+      </span>
+
+    </div>
+
+
+    <!-- ===================================
+         EXPENSES EXIST
+    ==================================== -->
+
+    @if (filteredExpenses.length > 0) {
+
+      <div class="expense-list">
+
+        @for (
+          expense of filteredExpenses;
+          track expense.id
+        ) {
+
+          <div class="expense-item">
+
+
+            <!-- ============================
+                 LEFT SIDE
+            ============================= -->
+
+            <div class="expense-info">
+
+              <div class="expense-icon">
+                ₹
+              </div>
+
+
+              <div class="expense-details">
+
+                <h3>
+                  {{ expense.title }}
+                </h3>
+
+
+                <div class="expense-meta">
+
+                  <span class="category-badge">
+                    {{ expense.category }}
+                  </span>
+
+                  <span>
+                    {{ expense.expenseDate }}
+                  </span>
+
+                </div>
+
+
+                @if (expense.description) {
+
+                  <p>
+                    {{ expense.description }}
+                  </p>
+
+                }
+
+              </div>
+
+            </div>
+
+
+            <!-- ============================
+                 RIGHT SIDE
+            ============================= -->
+
+            <div class="expense-right">
+
+              <strong class="expense-amount">
+
+                - ₹{{ expense.amount | number:'1.0-0' }}
+
+              </strong>
+
+
+              <div class="expense-actions">
+
+                <button
+                  type="button"
+                  class="edit-button"
+                  (click)="editExpense(expense)">
+
+                  Edit
+
+                </button>
+
+
+                <button
+                  type="button"
+                  class="delete-button"
+                  (click)="deleteExpense(expense.id)">
+
+                  Delete
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- ===================================
+         NO EXPENSES
+    ==================================== -->
+
+    @else {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ₹
+        </div>
+
+        <h3>
+          No expenses found
+        </h3>
+
+        <p>
+          Add your first expense to get started.
+        </p>
+
+        <button
+          type="button"
+          class="add-button"
+          (click)="openAddForm()">
+
+          + Add Expense
+
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+
+<!-- =====================================
+     ADD / EDIT EXPENSE MODAL
+====================================== -->
+
+@if (showForm) {
+
+  <div class="modal-overlay">
+
+    <div class="modal">
+
+
+      <!-- =================================
+           MODAL HEADER
+      ================================== -->
+
+      <div class="modal-header">
+
+        <div>
+
+          <h2>
+
+            @if (editingId !== null) {
+
+              Edit Expense
+
+            } @else {
+
+              Add Expense
+
+            }
+
+          </h2>
+
+          <p>
+            Enter your expense details
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="closeForm()">
+
+          ×
+
+        </button>
+
+      </div>
+
+
+      <!-- =================================
+           FORM
+      ================================== -->
+
+      <div class="form-body">
+
+
+        <!-- Title -->
+
+        <div class="form-group">
+
+          <label for="expenseTitle">
+            Expense Title
+          </label>
+
+          <input
+            id="expenseTitle"
+            type="text"
+            placeholder="e.g. Grocery Shopping"
+            [(ngModel)]="form.title"
+            name="expenseTitle"
+          />
+
+        </div>
+
+
+        <!-- Amount -->
+
+        <div class="form-group">
+
+          <label for="expenseAmount">
+            Amount
+          </label>
+
+          <input
+            id="expenseAmount"
+            type="number"
+            min="0"
+            placeholder="Enter amount"
+            [(ngModel)]="form.amount"
+            name="expenseAmount"
+          />
+
+        </div>
+
+
+        <!-- Category -->
+
+        <div class="form-group">
+
+          <label for="expenseCategory">
+            Category
+          </label>
+
+          <select
+            id="expenseCategory"
+            [(ngModel)]="form.category"
+            name="expenseCategory">
+
+            @if (categories.length === 0) {
+
+              <option value="">
+                No categories available
+              </option>
+
+            }
+
+            @for (
+              category of categories;
+              track category.id
+            ) {
+
+              <option
+                [value]="category.name">
+
+                {{ category.name }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- Date -->
+
+        <div class="form-group">
+
+          <label for="expenseDate">
+            Date
+          </label>
+
+          <input
+            id="expenseDate"
+            type="date"
+            [(ngModel)]="form.expenseDate"
+            name="expenseDate"
+          />
+
+        </div>
+
+
+        <!-- Description -->
+
+        <div class="form-group">
+
+          <label for="expenseDescription">
+            Description
+          </label>
+
+          <textarea
+            id="expenseDescription"
+            rows="4"
+            placeholder="Enter description"
+            [(ngModel)]="form.description"
+            name="expenseDescription">
+          </textarea>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================
+           MODAL FOOTER
+      ================================== -->
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeForm()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="save-button"
+          (click)="saveExpense()">
+
+          @if (editingId !== null) {
+
+            Update Expense
+
+          } @else {
+
+            Save Expense
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

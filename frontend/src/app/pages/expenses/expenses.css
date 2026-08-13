@@ -1,0 +1,562 @@
+.expenses-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+
+/* Header */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  font-size: 30px;
+
+  color: #0f172a;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+
+  color: #64748b;
+}
+
+
+/* Add Button */
+
+.add-button {
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background: #1d4ed8;
+}
+
+
+/* Summary */
+
+.summary-card {
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.summary-card span {
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.summary-card h2 {
+  margin: 8px 0 0;
+
+  font-size: 28px;
+
+  color: #0f172a;
+}
+
+.summary-icon {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 10px;
+
+  background: #fee2e2;
+
+  color: #dc2626;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-weight: bold;
+
+  font-size: 20px;
+}
+
+
+/* Filters */
+
+.filters {
+  display: flex;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.search-box {
+  flex: 1;
+}
+
+.search-box input,
+.category-filter select {
+  width: 100%;
+
+  height: 44px;
+
+  padding: 0 14px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.search-box input:focus,
+.category-filter select:focus {
+  border-color: #2563eb;
+}
+
+.category-filter {
+  width: 220px;
+}
+
+
+/* Table */
+
+.table-card {
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 22px;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-header h2 {
+  margin: 0;
+
+  font-size: 18px;
+
+  color: #0f172a;
+}
+
+.table-header p {
+  margin: 5px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  text-align: left;
+
+  padding: 14px 20px;
+
+  font-size: 12px;
+
+  color: #64748b;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+td {
+  padding: 16px 20px;
+
+  border-top: 1px solid #f1f5f9;
+
+  font-size: 14px;
+}
+
+
+/* Expense */
+
+.expense-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.expense-icon {
+  width: 38px;
+  height: 38px;
+
+  background: #f1f5f9;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #475569;
+
+  font-weight: 600;
+}
+
+.expense-name strong {
+  display: block;
+
+  color: #1e293b;
+}
+
+.expense-name span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+}
+
+
+/* Category */
+
+.category-badge {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.date {
+  color: #64748b;
+}
+
+.amount {
+  color: #dc2626;
+}
+
+
+/* Actions */
+
+.actions {
+  display: flex;
+
+  gap: 8px;
+}
+
+.actions button {
+  border: none;
+
+  padding: 7px 12px;
+
+  border-radius: 6px;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.edit-button {
+  background: #eff6ff;
+
+  color: #2563eb;
+}
+
+.delete-button {
+  background: #fef2f2;
+
+  color: #dc2626;
+}
+
+
+/* Empty */
+
+.empty-state {
+  text-align: center;
+
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  width: 55px;
+  height: 55px;
+
+  margin: 0 auto 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f1f5f9;
+
+  color: #64748b;
+
+  font-weight: bold;
+}
+
+.empty-state h3 {
+  margin: 0;
+
+  color: #1e293b;
+}
+
+.empty-state p {
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* Modal */
+
+.modal-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.5);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  z-index: 1000;
+}
+
+.modal {
+  width: 100%;
+
+  max-width: 520px;
+
+  background: white;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.2);
+}
+
+.modal-header {
+  padding: 22px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+}
+
+.modal-header h2 {
+  margin: 0;
+
+  color: #0f172a;
+}
+
+.modal-header p {
+  margin: 5px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.close-button {
+  border: none;
+
+  background: transparent;
+
+  font-size: 25px;
+
+  color: #64748b;
+
+  cursor: pointer;
+}
+
+
+/* Form */
+
+.form {
+  padding: 22px;
+}
+
+.form-group {
+  margin-bottom: 17px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 7px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2563eb;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+
+/* Form buttons */
+
+.form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 25px;
+}
+
+.cancel-button,
+.save-button {
+  border: none;
+
+  padding: 11px 18px;
+
+  border-radius: 7px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.cancel-button {
+  background: #f1f5f9;
+
+  color: #475569;
+}
+
+.save-button {
+  background: #2563eb;
+
+  color: white;
+}
+
+.save-button:hover {
+  background: #1d4ed8;
+}
+
+
+/* Responsive */
+
+@media (max-width: 700px) {
+
+  .page-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .category-filter {
+    width: 100%;
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+}
