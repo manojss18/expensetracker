@@ -1,18 +1,22 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
-import { Navbar } from './shared/components/navbar/navbar';
-import { Sidebar } from './shared/components/sidebar/sidebar';
+import {
+  RouterOutlet,
+  RouterLink,
+  RouterLinkActive
+} from '@angular/router';
 
 @Component({
   selector: 'app-root',
+
   imports: [
     RouterOutlet,
-    Navbar,
-    Sidebar
+    RouterLink,
+    RouterLinkActive
   ],
+
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
+
 }

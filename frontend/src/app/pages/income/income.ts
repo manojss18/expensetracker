@@ -1,191 +1,339 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  inject
+} from '@angular/core';
 
 import {
-  Income as IncomeModel,
+  FormsModule
+} from '@angular/forms';
+
+import {
+  DecimalPipe,
+  DatePipe
+} from '@angular/common';
+
+import {
+  Income,
   CreateIncome
 } from '../../core/models/income.model';
 
-import { IncomeService } from '../../core/services/income';
+import {
+  IncomeService
+} from '../../core/services/income';
+
 
 @Component({
   selector: 'app-income',
+
   standalone: true,
+
   imports: [
-    CommonModule,
-    FormsModule
+    FormsModule,
+    DecimalPipe,
+    DatePipe
   ],
+
   templateUrl: './income.html',
+
   styleUrl: './income.css'
 })
-export class Income implements OnInit {
+export class IncomePage implements OnInit {
 
-  private incomeService = inject(IncomeService);
+  // ==========================================
+  // SERVICE
+  // ==========================================
 
-  incomes: IncomeModel[] = [];
+  private incomeService =
+    inject(IncomeService);
+
+
+  // ==========================================
+  // DATA
+  // ==========================================
+
+  incomes: Income[] = [];
+
+
+  // ==========================================
+  // FILTERS
+  // ==========================================
+
+  searchText: string = '';
+
+  selectedSource: string = 'All';
 
   sources: string[] = [
     'Salary',
     'Freelance',
     'Business',
     'Investment',
-    'Bonus',
     'Other'
   ];
 
-  searchText = '';
 
-  selectedSource = 'All';
+  // ==========================================
+  // FORM
+  // ==========================================
 
-  showForm = false;
+  showForm: boolean = false;
 
   editingId: number | null = null;
 
-  form: CreateIncome = {
+  form = {
+    title: '',
     source: 'Salary',
     amount: 0,
-    description: '',
-    incomeDate: ''
+    incomeDate: '',
+    description: ''
   };
 
-  loading = false;
 
-  errorMessage = '';
+  // ==========================================
+  // INITIALIZE
+  // ==========================================
 
   ngOnInit(): void {
+
     this.loadIncome();
+
   }
+
+
+  // ==========================================
+  // GET INCOME
+  // ==========================================
 
   loadIncome(): void {
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.incomeService
+      .getIncome()
+      .subscribe({
 
-    this.incomeService.getIncome().subscribe({
+        next: (data: Income[]) => {
 
-      next: (data: IncomeModel[]) => {
+          console.log(
+            'Income data:',
+            data
+          );
 
-        this.incomes = data;
-        this.loading = false;
+          this.incomes = data;
 
-      },
+        },
 
-      error: (error: unknown) => {
+        error: (error: unknown) => {
 
-        console.error(
-          'Error loading income:',
-          error
-        );
+          console.error(
+            'Error loading income:',
+            error
+          );
 
-        this.errorMessage =
-          'Unable to load income. Please check whether the backend API is running.';
+          alert(
+            'Unable to load income.'
+          );
 
-        this.loading = false;
+        }
 
-      }
+      });
 
-    });
   }
 
-  get filteredIncome(): IncomeModel[] {
+
+  // ==========================================
+  // FILTERED INCOME
+  // ==========================================
+
+  get filteredIncome(): Income[] {
 
     return this.incomes.filter(
-      (income: IncomeModel) => {
-
-        const search =
-          this.searchText
-            .trim()
-            .toLowerCase();
+      (income: Income) => {
 
         const matchesSearch =
-          income.source
+          income.title
             .toLowerCase()
-            .includes(search) ||
-          income.description
-            .toLowerCase()
-            .includes(search);
+            .includes(
+              this.searchText
+                .toLowerCase()
+            );
+
 
         const matchesSource =
           this.selectedSource === 'All' ||
-          income.source === this.selectedSource;
+          income.source ===
+          this.selectedSource;
 
-        return matchesSearch && matchesSource;
+
+        return (
+          matchesSearch &&
+          matchesSource
+        );
+
       }
     );
+
   }
+
+
+  // ==========================================
+  // TOTAL INCOME
+  // ==========================================
 
   get totalIncome(): number {
 
-    return this.incomes.reduce(
+    return this.filteredIncome.reduce(
+
       (
         total: number,
-        income: IncomeModel
-      ) => total + income.amount,
+        income: Income
+      ) => {
+
+        return total + income.amount;
+
+      },
+
       0
+
     );
+
   }
+
+
+  // ==========================================
+  // OPEN ADD FORM
+  // ==========================================
 
   openAddForm(): void {
 
     this.editingId = null;
 
     this.form = {
+
+      title: '',
+
       source: 'Salary',
+
       amount: 0,
-      description: '',
-      incomeDate: this.getToday()
+
+      incomeDate:
+        new Date()
+          .toISOString()
+          .split('T')[0],
+
+      description: ''
+
     };
 
     this.showForm = true;
+
   }
 
-  editIncome(income: IncomeModel): void {
 
-    this.editingId = income.id;
+  // ==========================================
+  // EDIT
+  // ==========================================
+
+  editIncome(
+    income: Income
+  ): void {
+
+    this.editingId =
+      income.id;
 
     this.form = {
-      source: income.source,
-      amount: income.amount,
-      description: income.description,
-      incomeDate: income.incomeDate
-        ? income.incomeDate.substring(0, 10)
-        : ''
+
+      title:
+        income.title,
+
+      source:
+        income.source,
+
+      amount:
+        income.amount,
+
+      incomeDate:
+        income.incomeDate,
+
+      description:
+        income.description
+
     };
 
     this.showForm = true;
+
   }
+
+
+  // ==========================================
+  // SAVE
+  // ==========================================
 
   saveIncome(): void {
 
+    // ----------------------------------------
+    // VALIDATION
+    // ----------------------------------------
+
     if (
-      !this.form.source.trim() ||
+      !this.form.title.trim() ||
       this.form.amount <= 0 ||
       !this.form.incomeDate
     ) {
 
       alert(
-        'Please enter source, amount and date.'
+        'Please enter title, amount and date.'
       );
 
       return;
+
     }
 
-    this.loading = true;
-    this.errorMessage = '';
 
-    if (this.editingId !== null) {
+    const incomeData: CreateIncome = {
+
+      title:
+        this.form.title.trim(),
+
+      amount:
+        Number(this.form.amount),
+
+      source:
+        this.form.source,
+
+      description:
+        this.form.description.trim(),
+
+      incomeDate:
+        this.form.incomeDate
+
+    };
+
+
+    // ========================================
+    // UPDATE
+    // ========================================
+
+    if (
+      this.editingId !== null
+    ) {
+
+      console.log(
+        'Updating income:',
+        incomeData
+      );
+
 
       this.incomeService
         .updateIncome(
           this.editingId,
-          this.form
+          incomeData
         )
         .subscribe({
 
           next: () => {
 
-            this.loading = false;
+            console.log(
+              'Income updated successfully'
+            );
 
             this.closeForm();
 
@@ -200,29 +348,41 @@ export class Income implements OnInit {
               error
             );
 
-            this.loading = false;
+            alert(
+              'Failed to update income.'
+            );
 
-            this.errorMessage =
-              'Unable to update income.';
           }
 
         });
 
       return;
+
     }
 
+
+    // ========================================
+    // CREATE
+    // ========================================
+
+    console.log(
+      'Creating income:',
+      incomeData
+    );
+
+
     this.incomeService
-      .createIncome(this.form)
+      .createIncome(
+        incomeData
+      )
       .subscribe({
 
-        next: (createdIncome: IncomeModel) => {
+        next: (data: Income) => {
 
           console.log(
             'Income created:',
-            createdIncome
+            data
           );
-
-          this.loading = false;
 
           this.closeForm();
 
@@ -237,27 +397,37 @@ export class Income implements OnInit {
             error
           );
 
-          this.loading = false;
+          alert(
+            'Failed to add income.'
+          );
 
-          this.errorMessage =
-            'Unable to create income. Please check the backend API.';
         }
 
       });
+
   }
 
-  deleteIncome(id: number): void {
 
-    const confirmed = confirm(
-      'Are you sure you want to delete this income?'
-    );
+  // ==========================================
+  // DELETE
+  // ==========================================
+
+  deleteIncome(
+    id: number
+  ): void {
+
+    const confirmed =
+      confirm(
+        'Are you sure you want to delete this income?'
+      );
+
 
     if (!confirmed) {
+
       return;
+
     }
 
-    this.loading = true;
-    this.errorMessage = '';
 
     this.incomeService
       .deleteIncome(id)
@@ -265,7 +435,9 @@ export class Income implements OnInit {
 
         next: () => {
 
-          this.loading = false;
+          console.log(
+            'Income deleted successfully'
+          );
 
           this.loadIncome();
 
@@ -278,14 +450,20 @@ export class Income implements OnInit {
             error
           );
 
-          this.loading = false;
+          alert(
+            'Failed to delete income.'
+          );
 
-          this.errorMessage =
-            'Unable to delete income.';
         }
 
       });
+
   }
+
+
+  // ==========================================
+  // CLOSE FORM
+  // ==========================================
 
   closeForm(): void {
 
@@ -293,18 +471,6 @@ export class Income implements OnInit {
 
     this.editingId = null;
 
-    this.form = {
-      source: 'Salary',
-      amount: 0,
-      description: '',
-      incomeDate: ''
-    };
   }
 
-  private getToday(): string {
-
-    return new Date()
-      .toISOString()
-      .substring(0, 10);
-  }
 }

@@ -11,11 +11,15 @@ export class CategoryService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'https://localhost:7001/api/categories';
+  private apiUrl = 'http://localhost:5177/api/categories';
 
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(
-      this.apiUrl
+    return this.http.get<Category[]>(this.apiUrl);
+  }
+
+  getCategory(id: number): Observable<Category> {
+    return this.http.get<Category>(
+      `${this.apiUrl}/${id}`
     );
   }
 

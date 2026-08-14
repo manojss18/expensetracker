@@ -14,7 +14,7 @@ export class IncomeService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'https://localhost:7001/api/income';
+  private apiUrl = 'http://localhost:5177/api/income';
 
   getIncome(): Observable<Income[]> {
     return this.http.get<Income[]>(this.apiUrl);
@@ -29,7 +29,6 @@ export class IncomeService {
   createIncome(
     income: CreateIncome
   ): Observable<Income> {
-
     return this.http.post<Income>(
       this.apiUrl,
       income
@@ -40,17 +39,18 @@ export class IncomeService {
     id: number,
     income: CreateIncome
   ): Observable<void> {
-
     return this.http.put<void>(
       `${this.apiUrl}/${id}`,
-      income
+      {
+        ...income,
+        id: id
+      }
     );
   }
 
   deleteIncome(
     id: number
   ): Observable<void> {
-
     return this.http.delete<void>(
       `${this.apiUrl}/${id}`
     );

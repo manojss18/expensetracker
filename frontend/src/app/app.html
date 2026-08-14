@@ -1,15 +1,186 @@
 <div class="app-layout">
 
-  <app-sidebar></app-sidebar>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
 
-  <div class="main-section">
+    <!-- LOGO -->
+    <div class="sidebar-header">
 
-    <app-navbar></app-navbar>
+      <div class="logo-icon">
+        ₹
+      </div>
 
-    <main class="content">
-      <router-outlet></router-outlet>
-    </main>
+      <div class="logo-text">
+        <h2>MyFinance</h2>
+        <span>Personal Tracker</span>
+      </div>
 
-  </div>
+    </div>
+
+
+    <!-- NAVIGATION -->
+    <nav class="sidebar-nav">
+
+      <div class="nav-section">
+
+        <span class="nav-title">
+          MAIN
+        </span>
+
+
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-item">
+
+          <span class="nav-icon">
+            ▦
+          </span>
+
+          <span>
+            Dashboard
+          </span>
+
+        </a>
+
+
+        <a
+          routerLink="/expenses"
+          routerLinkActive="active"
+          class="nav-item">
+
+          <span class="nav-icon">
+            ↓
+          </span>
+
+          <span>
+            Expenses
+          </span>
+
+        </a>
+
+
+        <a
+          routerLink="/income"
+          routerLinkActive="active"
+          class="nav-item">
+
+          <span class="nav-icon">
+            ↑
+          </span>
+
+          <span>
+            Income
+          </span>
+
+        </a>
+
+
+        <a
+          routerLink="/categories"
+          routerLinkActive="active"
+          class="nav-item">
+
+          <span class="nav-icon">
+            ☷
+          </span>
+
+          <span>
+            Categories
+          </span>
+
+        </a>
+
+      </div>
+
+
+      <!-- MANAGEMENT -->
+
+      <div class="nav-section">
+
+        <span class="nav-title">
+          MANAGEMENT
+        </span>
+
+
+        <a
+          routerLink="/dashboard"
+          class="nav-item">
+
+          <span class="nav-icon">
+            ▥
+          </span>
+
+          <span>
+            Reports
+          </span>
+
+          <span class="coming-soon">
+            Soon
+          </span>
+
+        </a>
+
+
+        <a
+          routerLink="/dashboard"
+          class="nav-item">
+
+          <span class="nav-icon">
+            ⚙
+          </span>
+
+          <span>
+            Settings
+          </span>
+
+          <span class="coming-soon">
+            Soon
+          </span>
+
+        </a>
+
+      </div>
+
+    </nav>
+
+
+    <!-- SIDEBAR FOOTER -->
+
+    <div class="sidebar-footer">
+
+      <div class="user-card">
+
+        <div class="user-avatar">
+          M
+        </div>
+
+        <div class="user-info">
+
+          <strong>
+            Manoj
+          </strong>
+
+          <span>
+            Personal Account
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="main-content">
+
+    <router-outlet></router-outlet>
+
+  </main>
 
 </div>

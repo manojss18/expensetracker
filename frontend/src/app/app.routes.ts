@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Expenses } from './pages/expenses/expenses';
-import { Income } from './pages/income/income';
 import { Categories } from './pages/categories/categories';
+import { IncomePage } from './pages/income/income';
 
 export const routes: Routes = [
 
@@ -25,7 +25,7 @@ export const routes: Routes = [
 
   {
     path: 'income',
-    component: Income
+    component: IncomePage
   },
 
   {

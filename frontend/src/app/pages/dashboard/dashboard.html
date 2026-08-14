@@ -1,338 +1,559 @@
 <div class="dashboard">
 
-  <!-- Header -->
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
   <div class="page-header">
 
     <div>
-      <h1>Dashboard</h1>
+
+      <h1>
+        Dashboard
+      </h1>
 
       <p>
         Here's your financial overview
       </p>
+
     </div>
 
-    <button
-      class="add-button"
-      routerLink="/expenses">
 
-      + Add Expense
+    <div class="header-actions">
 
-    </button>
+      <button
+        class="refresh-button"
+        type="button"
+        (click)="loadDashboard()">
+
+        ↻ Refresh
+
+      </button>
+
+
+      <a
+        class="add-button"
+        routerLink="/expenses">
+
+        + Add Expense
+
+      </a>
+
+    </div>
 
   </div>
 
 
-  <!-- Error Message -->
+  <!-- ========================================= -->
+  <!-- MONTH FILTER -->
+  <!-- ========================================= -->
+
+  <div class="month-filter">
+
+    <div>
+
+      <label for="month">
+
+        Select Month
+
+      </label>
+
+      <p>
+        View your income and expenses for a specific month
+      </p>
+
+    </div>
+
+
+    <input
+      id="month"
+      type="month"
+      [(ngModel)]="selectedMonth">
+
+  </div>
+
+
+  <!-- ========================================= -->
+  <!-- ERROR -->
+  <!-- ========================================= -->
+
   @if (errorMessage) {
 
     <div class="error-message">
+
       {{ errorMessage }}
+
     </div>
 
   }
 
 
-  <!-- Summary Cards -->
-  <div class="summary-grid">
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
 
-    <!-- Total Income -->
-    <div class="summary-card income-card">
+  @if (isLoading) {
 
-      <div class="card-top">
+    <div class="loading">
 
-        <div>
+      Loading dashboard...
 
-          <span class="card-label">
-            Total Income
-          </span>
+    </div>
 
-          <h2>
-            ₹{{ totalIncome | number:'1.0-0' }}
-          </h2>
+  }
+
+
+  <!-- ========================================= -->
+  <!-- MAIN DASHBOARD -->
+  <!-- ========================================= -->
+
+  @if (!isLoading) {
+
+
+    <!-- ======================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ======================================= -->
+
+    <div class="summary-grid">
+
+
+      <!-- INCOME -->
+
+      <div class="summary-card income-card">
+
+        <div class="card-top">
+
+          <div>
+
+            <span class="card-label">
+
+              Total Income
+
+            </span>
+
+
+            <h2>
+
+              ₹{{ totalIncome | number:'1.0-0' }}
+
+            </h2>
+
+          </div>
+
+
+          <div class="card-icon income-icon">
+
+            ↑
+
+          </div>
 
         </div>
 
-        <div class="card-icon income-icon">
-          ↑
-        </div>
+
+        <p class="card-description">
+
+          Money received this month
+
+        </p>
 
       </div>
 
-      <p class="card-description">
-        Money received this month
-      </p>
+
+      <!-- EXPENSES -->
+
+      <div class="summary-card expense-card">
+
+        <div class="card-top">
+
+          <div>
+
+            <span class="card-label">
+
+              Total Expenses
+
+            </span>
+
+
+            <h2>
+
+              ₹{{ totalExpenses | number:'1.0-0' }}
+
+            </h2>
+
+          </div>
+
+
+          <div class="card-icon expense-icon">
+
+            ↓
+
+          </div>
+
+        </div>
+
+
+        <p class="card-description">
+
+          Money spent this month
+
+        </p>
+
+      </div>
+
+
+      <!-- BALANCE -->
+
+      <div class="summary-card balance-card">
+
+        <div class="card-top">
+
+          <div>
+
+            <span class="card-label">
+
+              Current Balance
+
+            </span>
+
+
+            <h2>
+
+              ₹{{ balance | number:'1.0-0' }}
+
+            </h2>
+
+          </div>
+
+
+          <div class="card-icon balance-icon">
+
+            ₹
+
+          </div>
+
+        </div>
+
+
+        <p class="card-description">
+
+          Income minus expenses
+
+        </p>
+
+      </div>
+
+
+      <!-- SAVINGS -->
+
+      <div class="summary-card savings-card">
+
+        <div class="card-top">
+
+          <div>
+
+            <span class="card-label">
+
+              Savings Rate
+
+            </span>
+
+
+            <h2>
+
+              {{ savingsPercentage }}%
+
+            </h2>
+
+          </div>
+
+
+          <div class="card-icon savings-icon">
+
+            %
+
+          </div>
+
+        </div>
+
+
+        <p class="card-description">
+
+          Of your income saved
+
+        </p>
+
+      </div>
 
     </div>
 
 
-    <!-- Total Expenses -->
-    <div class="summary-card expense-card">
+    <!-- ======================================= -->
+    <!-- BOTTOM GRID -->
+    <!-- ======================================= -->
 
-      <div class="card-top">
-
-        <div>
-
-          <span class="card-label">
-            Total Expenses
-          </span>
-
-          <h2>
-            ₹{{ totalExpenses | number:'1.0-0' }}
-          </h2>
-
-        </div>
-
-        <div class="card-icon expense-icon">
-          ↓
-        </div>
-
-      </div>
-
-      <p class="card-description">
-        Money spent this month
-      </p>
-
-    </div>
+    <div class="dashboard-grid">
 
 
-    <!-- Current Balance -->
-    <div class="summary-card balance-card">
+      <!-- ===================================== -->
+      <!-- RECENT EXPENSES -->
+      <!-- ===================================== -->
 
-      <div class="card-top">
+      <div class="section-card">
 
-        <div>
+        <div class="section-header">
 
-          <span class="card-label">
-            Current Balance
-          </span>
+          <div>
 
-          <h2>
-            ₹{{ balance | number:'1.0-0' }}
-          </h2>
+            <h2>
 
-        </div>
+              Recent Expenses
 
-        <div class="card-icon balance-icon">
-          ₹
-        </div>
+            </h2>
 
-      </div>
-
-      <p class="card-description">
-        Available balance
-      </p>
-
-    </div>
-
-
-    <!-- Savings -->
-    <div class="summary-card savings-card">
-
-      <div class="card-top">
-
-        <div>
-
-          <span class="card-label">
-            Savings Rate
-          </span>
-
-          <h2>
-            {{ savingsPercentage }}%
-          </h2>
-
-        </div>
-
-        <div class="card-icon savings-icon">
-          %
-        </div>
-
-      </div>
-
-      <p class="card-description">
-        Of your income saved
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <!-- Bottom Section -->
-  <div class="dashboard-grid">
-
-
-    <!-- Recent Expenses -->
-    <div class="section-card">
-
-      <div class="section-header">
-
-        <div>
-
-          <h2>
-            Recent Expenses
-          </h2>
-
-          <p>
-            Your latest transactions
-          </p>
-
-        </div>
-
-        <a routerLink="/expenses">
-          View All
-        </a>
-
-      </div>
-
-
-      <div class="expense-list">
-
-        @if (recentExpenses.length > 0) {
-
-          @for (
-            expense of recentExpenses;
-            track expense.date + expense.title
-          ) {
-
-            <div class="expense-item">
-
-              <div class="expense-info">
-
-                <div class="expense-icon">
-                  ₹
-                </div>
-
-                <div>
-
-                  <h3>
-                    {{ expense.title }}
-                  </h3>
-
-                  <span>
-                    {{ expense.category }}
-                    •
-                    {{ expense.date }}
-                  </span>
-
-                </div>
-
-              </div>
-
-              <strong>
-                - ₹{{ expense.amount | number:'1.0-0' }}
-              </strong>
-
-            </div>
-
-          }
-
-        }
-
-        @else {
-
-          <div class="empty-state">
 
             <p>
-              No expenses found.
+
+              Latest expenses for this month
+
             </p>
 
           </div>
 
+
+          <a
+            routerLink="/expenses">
+
+            View All
+
+          </a>
+
+        </div>
+
+
+        @if (
+          recentExpenses.length === 0
+        ) {
+
+          <div class="empty-state">
+
+            <h3>
+
+              No expenses this month
+
+            </h3>
+
+
+            <p>
+
+              Add an expense to see it here.
+
+            </p>
+
+
+            <a
+              class="add-button"
+              routerLink="/expenses">
+
+              + Add Expense
+
+            </a>
+
+          </div>
+
+        }
+
+
+        @if (
+          recentExpenses.length > 0
+        ) {
+
+          <div class="expense-list">
+
+            @for (
+              expense of recentExpenses;
+              track expense.id
+            ) {
+
+              <div class="expense-item">
+
+
+                <div class="expense-info">
+
+
+                  <div class="expense-icon">
+
+                    ₹
+
+                  </div>
+
+
+                  <div>
+
+                    <h3>
+
+                      {{ expense.title }}
+
+                    </h3>
+
+
+                    <span>
+
+                      {{ expense.category }}
+
+                      •
+
+                      {{ expense.expenseDate }}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <strong>
+
+                  - ₹{{ expense.amount | number:'1.0-0' }}
+
+                </strong>
+
+              </div>
+
+            }
+
+          </div>
+
         }
 
       </div>
 
-    </div>
+
+      <!-- ===================================== -->
+      <!-- FINANCIAL OVERVIEW -->
+      <!-- ===================================== -->
+
+      <div class="section-card">
 
 
-    <!-- Financial Overview -->
-    <div class="section-card">
+        <div class="section-header">
 
-      <div class="section-header">
+          <div>
 
-        <div>
+            <h2>
 
-          <h2>
-            Financial Overview
-          </h2>
+              Financial Overview
 
-          <p>
-            This month's summary
-          </p>
-
-        </div>
-
-      </div>
+            </h2>
 
 
-      <div class="overview">
+            <p>
 
-        <!-- Income -->
-        <div class="overview-row">
+              Selected month's summary
 
-          <span>
-            Income
-          </span>
+            </p>
 
-          <strong class="positive">
-            + ₹{{ totalIncome | number:'1.0-0' }}
-          </strong>
+          </div>
 
         </div>
 
 
-        <!-- Expenses -->
-        <div class="overview-row">
-
-          <span>
-            Expenses
-          </span>
-
-          <strong class="negative">
-            - ₹{{ totalExpenses | number:'1.0-0' }}
-          </strong>
-
-        </div>
+        <div class="overview">
 
 
-        <div class="divider"></div>
+          <!-- INCOME -->
 
-
-        <!-- Balance -->
-        <div class="overview-row total-row">
-
-          <span>
-            Balance
-          </span>
-
-          <strong>
-            ₹{{ balance | number:'1.0-0' }}
-          </strong>
-
-        </div>
-
-
-        <!-- Savings -->
-        <div class="progress-section">
-
-          <div class="progress-header">
+          <div class="overview-row">
 
             <span>
-              Savings
+
+              Income
+
             </span>
 
-            <span>
-              {{ savingsPercentage }}%
-            </span>
+
+            <strong class="positive">
+
+              + ₹{{ totalIncome | number:'1.0-0' }}
+
+            </strong>
 
           </div>
 
 
-          <div class="progress-bar">
+          <!-- EXPENSE -->
 
-            <div
-              class="progress"
-              [style.width.%]="savingsPercentage">
+          <div class="overview-row">
+
+            <span>
+
+              Expenses
+
+            </span>
+
+
+            <strong class="negative">
+
+              - ₹{{ totalExpenses | number:'1.0-0' }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="divider"></div>
+
+
+          <!-- BALANCE -->
+
+          <div class="overview-row total-row">
+
+            <span>
+
+              Balance
+
+            </span>
+
+
+            <strong>
+
+              ₹{{ balance | number:'1.0-0' }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- SAVINGS -->
+
+          <div class="progress-section">
+
+
+            <div class="progress-header">
+
+              <span>
+
+                Savings
+
+              </span>
+
+
+              <span>
+
+                {{ savingsPercentage }}%
+
+              </span>
+
+            </div>
+
+
+            <div class="progress-bar">
+
+              <div
+                class="progress"
+                [style.width.%]="savingsPercentage">
+
+              </div>
+
             </div>
 
           </div>
@@ -343,6 +564,6 @@
 
     </div>
 
-  </div>
+  }
 
 </div>

@@ -12,16 +12,15 @@ import {
 })
 export class ExpenseService {
 
-  private readonly http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-  private readonly apiUrl =
-    'https://localhost:7001/api/expenses';
+  private apiUrl = 'http://localhost:5177/api/expenses';
 
   getExpenses(): Observable<Expense[]> {
     return this.http.get<Expense[]>(this.apiUrl);
   }
 
-  getExpense(id: number): Observable<Expense> {
+  getExpenseById(id: number): Observable<Expense> {
     return this.http.get<Expense>(
       `${this.apiUrl}/${id}`
     );
@@ -44,14 +43,14 @@ export class ExpenseService {
 
     return this.http.put<void>(
       `${this.apiUrl}/${id}`,
-      expense
+      {
+        ...expense,
+        id: id
+      }
     );
   }
 
-  deleteExpense(
-    id: number
-  ): Observable<void> {
-
+  deleteExpense(id: number): Observable<void> {
     return this.http.delete<void>(
       `${this.apiUrl}/${id}`
     );

@@ -1,120 +1,158 @@
 <div class="income-page">
 
-  <!-- Header -->
+  <!-- HEADER -->
+
   <div class="page-header">
 
     <div>
       <h1>Income</h1>
 
       <p>
-        Manage and track your income
+        Track and manage your personal income
       </p>
     </div>
 
+
     <button
-      class="add-button"
+      class="add-income-btn"
+      type="button"
       (click)="openAddForm()">
 
-      + Add Income
+      <span>+</span>
+
+      Add Income
 
     </button>
 
   </div>
 
 
-  <!-- Error -->
-  @if (errorMessage) {
+  <!-- SUMMARY -->
 
-    <div class="error-message">
-      {{ errorMessage }}
-    </div>
-
-  }
-
-
-  <!-- Summary -->
   <div class="summary-card">
-
-    <div>
-      <span>Total Income</span>
-
-      <h2>
-        ₹{{ totalIncome | number:'1.0-0' }}
-      </h2>
-    </div>
 
     <div class="summary-icon">
       ₹
     </div>
 
+    <div>
+
+      <span>Total Income</span>
+
+      <h2>
+        ₹{{ totalIncome | number:'1.0-0' }}
+      </h2>
+
+      <small>
+        {{ filteredIncome.length }} transactions
+      </small>
+
+    </div>
+
   </div>
 
 
-  <!-- Filters -->
-  <div class="filters">
+  <!-- FILTERS -->
+
+  <div class="filters-card">
 
     <div class="search-box">
 
+      <span>⌕</span>
+
       <input
         type="text"
-        placeholder="Search income..."
-        [(ngModel)]="searchText">
+        [(ngModel)]="searchText"
+        placeholder="Search income...">
 
     </div>
 
 
-    <div class="source-filter">
+    <select
+      [(ngModel)]="selectedSource">
 
-      <select
-        [(ngModel)]="selectedSource">
+      <option value="All">
+        All Sources
+      </option>
 
-        <option value="All">
-          All Sources
+      @for (
+        source of sources;
+        track source
+      ) {
+
+        <option [value]="source">
+          {{ source }}
         </option>
 
-        @for (source of sources; track source) {
+      }
 
-          <option [value]="source">
-            {{ source }}
-          </option>
-
-        }
-
-      </select>
-
-    </div>
+    </select>
 
   </div>
 
 
-  <!-- Income Table -->
-  <div class="table-card">
+  <!-- INCOME TABLE -->
+
+  <div class="income-card">
 
     <div class="table-header">
 
       <div>
 
-        <h2>All Income</h2>
+        <h2>
+          All Income
+        </h2>
 
         <p>
-          {{ filteredIncome.length }} transactions
+          Your recent income transactions
         </p>
 
       </div>
 
+
+      <span class="transaction-count">
+
+        {{ filteredIncome.length }}
+
+      </span>
+
     </div>
 
 
-    @if (loading) {
+    <!-- EMPTY -->
 
-      <div class="loading">
-        Loading income...
+    @if (filteredIncome.length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ₹
+        </div>
+
+        <h3>
+          No income found
+        </h3>
+
+        <p>
+          Try changing your search or add a new income.
+        </p>
+
+        <button
+          type="button"
+          (click)="openAddForm()">
+
+          + Add Income
+
+        </button>
+
       </div>
 
     }
 
 
-    @else if (filteredIncome.length > 0) {
+    <!-- TABLE -->
+
+    @if (filteredIncome.length > 0) {
 
       <div class="table-wrapper">
 
@@ -124,15 +162,29 @@
 
             <tr>
 
-              <th>Source</th>
+              <th>
+                Income
+              </th>
 
-              <th>Description</th>
+              <th>
+                Source
+              </th>
 
-              <th>Date</th>
+              <th>
+                Date
+              </th>
 
-              <th>Amount</th>
+              <th>
+                Description
+              </th>
 
-              <th>Actions</th>
+              <th class="amount-column">
+                Amount
+              </th>
+
+              <th class="action-column">
+                Actions
+              </th>
 
             </tr>
 
@@ -148,43 +200,39 @@
 
               <tr>
 
-                <!-- Source -->
+                <!-- TITLE -->
 
                 <td>
 
                   <div class="income-name">
 
-                    <div class="income-icon">
+                    <div class="income-avatar">
                       ₹
                     </div>
 
-                    <div>
-
-                      <strong>
-                        {{ income.source }}
-                      </strong>
-
-                    </div>
+                    <strong>
+                      {{ income.title }}
+                    </strong>
 
                   </div>
 
                 </td>
 
 
-                <!-- Description -->
+                <!-- SOURCE -->
 
                 <td>
 
-                  <span class="description">
+                  <span class="source-badge">
 
-                    {{ income.description || 'No description' }}
+                    {{ income.source }}
 
                   </span>
 
                 </td>
 
 
-                <!-- Date -->
+                <!-- DATE -->
 
                 <td>
 
@@ -197,11 +245,27 @@
                 </td>
 
 
-                <!-- Amount -->
+                <!-- DESCRIPTION -->
 
                 <td>
 
-                  <strong class="amount">
+                  <span class="description">
+
+                    {{
+                      income.description ||
+                      'No description'
+                    }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- AMOUNT -->
+
+                <td class="amount-column">
+
+                  <strong class="income-amount">
 
                     + ₹{{ income.amount | number:'1.0-0' }}
 
@@ -210,25 +274,30 @@
                 </td>
 
 
-                <!-- Actions -->
+                <!-- ACTIONS -->
 
-                <td>
+                <td class="action-column">
 
                   <div class="actions">
 
                     <button
-                      class="edit-button"
+                      type="button"
+                      class="edit-btn"
+                      title="Edit"
                       (click)="editIncome(income)">
 
-                      Edit
+                      ✎
 
                     </button>
 
+
                     <button
-                      class="delete-button"
+                      type="button"
+                      class="delete-btn"
+                      title="Delete"
                       (click)="deleteIncome(income.id)">
 
-                      Delete
+                      ×
 
                     </button>
 
@@ -248,190 +317,199 @@
 
     }
 
-
-    @else {
-
-      <div class="empty-state">
-
-        <div class="empty-icon">
-          ₹
-        </div>
-
-        <h3>
-          No income found
-        </h3>
-
-        <p>
-          Add your first income transaction.
-        </p>
-
-      </div>
-
-    }
-
   </div>
 
-</div>
+
+  <!-- ADD / EDIT MODAL -->
+
+  @if (showForm) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeForm()">
 
 
-<!-- Add/Edit Modal -->
-
-@if (showForm) {
-
-  <div class="modal-backdrop">
-
-    <div class="modal">
+      <div
+        class="income-modal"
+        (click)="$event.stopPropagation()">
 
 
-      <!-- Modal Header -->
+        <!-- MODAL HEADER -->
 
-      <div class="modal-header">
+        <div class="modal-header">
 
-        <div>
+          <div>
 
-          <h2>
+            <h2>
 
-            @if (editingId !== null) {
-              Edit Income
-            }
-            @else {
-              Add Income
-            }
+              {{
+                editingId === null
+                  ? 'Add Income'
+                  : 'Edit Income'
+              }}
 
-          </h2>
+            </h2>
 
-          <p>
-            Enter your income details
-          </p>
+            <p>
+              Enter your income details
+            </p>
 
-        </div>
+          </div>
 
-
-        <button
-          class="close-button"
-          (click)="closeForm()">
-
-          ×
-
-        </button>
-
-      </div>
-
-
-      <!-- Form -->
-
-      <div class="form">
-
-
-        <!-- Source -->
-
-        <div class="form-group">
-
-          <label>
-            Income Source
-          </label>
-
-          <select
-            [(ngModel)]="form.source">
-
-            @for (source of sources; track source) {
-
-              <option [value]="source">
-                {{ source }}
-              </option>
-
-            }
-
-          </select>
-
-        </div>
-
-
-        <!-- Amount -->
-
-        <div class="form-group">
-
-          <label>
-            Amount
-          </label>
-
-          <input
-            type="number"
-            min="1"
-            placeholder="Enter amount"
-            [(ngModel)]="form.amount">
-
-        </div>
-
-
-        <!-- Date -->
-
-        <div class="form-group">
-
-          <label>
-            Income Date
-          </label>
-
-          <input
-            type="date"
-            [(ngModel)]="form.incomeDate">
-
-        </div>
-
-
-        <!-- Description -->
-
-        <div class="form-group">
-
-          <label>
-            Description
-          </label>
-
-          <textarea
-            rows="3"
-            placeholder="Optional description"
-            [(ngModel)]="form.description">
-          </textarea>
-
-        </div>
-
-
-        <!-- Form Buttons -->
-
-        <div class="form-actions">
 
           <button
-            class="cancel-button"
+            type="button"
+            class="close-btn"
             (click)="closeForm()">
 
-            Cancel
-
-          </button>
-
-
-          <button
-            class="save-button"
-            (click)="saveIncome()"
-            [disabled]="loading">
-
-            @if (loading) {
-              Saving...
-            }
-            @else if (editingId !== null) {
-              Update Income
-            }
-            @else {
-              Save Income
-            }
+            ×
 
           </button>
 
         </div>
+
+
+        <!-- FORM -->
+
+        <form
+          (ngSubmit)="saveIncome()">
+
+
+          <!-- TITLE -->
+
+          <div class="form-group">
+
+            <label>
+              Income Title
+            </label>
+
+            <input
+              type="text"
+              name="title"
+              [(ngModel)]="form.title"
+              placeholder="e.g. Monthly Salary">
+
+          </div>
+
+
+          <!-- SOURCE + AMOUNT -->
+
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label>
+                Source
+              </label>
+
+              <select
+                name="source"
+                [(ngModel)]="form.source">
+
+                @for (
+                  source of sources;
+                  track source
+                ) {
+
+                  <option [value]="source">
+
+                    {{ source }}
+
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label>
+                Amount
+              </label>
+
+              <input
+                type="number"
+                name="amount"
+                [(ngModel)]="form.amount"
+                min="1"
+                placeholder="0">
+
+            </div>
+
+          </div>
+
+
+          <!-- DATE -->
+
+          <div class="form-group">
+
+            <label>
+              Date
+            </label>
+
+            <input
+              type="date"
+              name="incomeDate"
+              [(ngModel)]="form.incomeDate">
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group">
+
+            <label>
+              Description
+            </label>
+
+            <textarea
+              name="description"
+              [(ngModel)]="form.description"
+              rows="3"
+              placeholder="Optional description">
+            </textarea>
+
+          </div>
+
+
+          <!-- BUTTONS -->
+
+          <div class="modal-actions">
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="closeForm()">
+
+              Cancel
+
+            </button>
+
+
+            <button
+              type="submit"
+              class="save-btn">
+
+              {{
+                editingId === null
+                  ? 'Add Income'
+                  : 'Save Changes'
+              }}
+
+            </button>
+
+          </div>
+
+        </form>
 
       </div>
 
     </div>
 
-  </div>
+  }
 
-}
+</div>

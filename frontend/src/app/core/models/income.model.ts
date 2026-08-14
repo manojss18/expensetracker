@@ -1,14 +1,16 @@
 export interface Income {
   id: number;
-  source: string;
+  title: string;
   amount: number;
+  source: string;
   description: string;
   incomeDate: string;
 }
 
 export interface CreateIncome {
-  source: string;
+  title: string;
   amount: number;
+  source: string;
   description: string;
   incomeDate: string;
 }

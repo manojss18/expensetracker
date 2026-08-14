@@ -4,17 +4,11 @@ import {
   inject
 } from '@angular/core';
 
-import {
-  FormsModule
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  Category
-} from '../../core/models/category.model';
+import { Category } from '../../core/models/category.model';
 
-import {
-  CategoryService
-} from '../../core/services/category';
+import { CategoryService } from '../../core/services/category';
 
 @Component({
   selector: 'app-categories',
@@ -34,55 +28,17 @@ export class Categories implements OnInit {
   private categoryService =
     inject(CategoryService);
 
-
-  // =========================
-  // Categories
-  // =========================
-
   categories: Category[] = [];
 
+  newCategory = '';
 
-  // =========================
-  // New Category
-  // =========================
-
-  newCategory: string = '';
-
-
-  // =========================
-  // Loading
-  // =========================
-
-  loading: boolean = false;
-
-
-  // =========================
-  // Error
-  // =========================
-
-  errorMessage: string = '';
-
-
-  // =========================
-  // Initialize
-  // =========================
+  showForm = false;
 
   ngOnInit(): void {
-
     this.loadCategories();
-
   }
 
-
-  // =========================
-  // Load Categories
-  // =========================
-
   loadCategories(): void {
-
-    this.loading = true;
-
-    this.errorMessage = '';
 
     this.categoryService
       .getCategories()
@@ -92,88 +48,59 @@ export class Categories implements OnInit {
 
           this.categories = data;
 
-          this.loading = false;
-
+          console.log(
+            'Categories loaded:',
+            data
+          );
         },
 
         error: (error: unknown) => {
 
           console.error(
-            'Error loading categories:',
+            'Failed to load categories:',
             error
           );
-
-          this.errorMessage =
-            'Unable to load categories.';
-
-          this.loading = false;
 
         }
 
       });
-
   }
 
+  openAddForm(): void {
 
-  // =========================
-  // Add Category
-  // =========================
+    this.newCategory = '';
+
+    this.showForm = true;
+  }
+
+  closeForm(): void {
+
+    this.showForm = false;
+
+    this.newCategory = '';
+  }
 
   addCategory(): void {
 
-    const categoryName =
+    const name =
       this.newCategory.trim();
 
+    if (!name) {
 
-    // Validation
-
-    if (!categoryName) {
-
-      this.errorMessage =
-        'Please enter a category name.';
-
-      return;
-
-    }
-
-
-    // Check duplicate
-
-    const alreadyExists =
-      this.categories.some(
-        (category: Category) =>
-          category.name.toLowerCase() ===
-          categoryName.toLowerCase()
+      alert(
+        'Please enter a category name.'
       );
 
-
-    if (alreadyExists) {
-
-      this.errorMessage =
-        'This category already exists.';
-
       return;
-
     }
-
-
-    // Create object
 
     const category: Category = {
 
       id: 0,
 
-      name: categoryName
+      name: name
 
     };
-
-
-    this.loading = true;
-
-    this.errorMessage = '';
-
-
-    // Send to API
 
     this.categoryService
       .createCategory(category)
@@ -186,40 +113,29 @@ export class Categories implements OnInit {
             createdCategory
           );
 
-
-          // Clear input
+          this.categories.push(
+            createdCategory
+          );
 
           this.newCategory = '';
 
-
-          // Reload categories
-
-          this.loadCategories();
-
+          this.showForm = false;
         },
 
         error: (error: unknown) => {
 
           console.error(
-            'Error creating category:',
+            'Failed to create category:',
             error
           );
 
-          this.loading = false;
-
-          this.errorMessage =
-            'Failed to add category.';
-
+          alert(
+            'Failed to add category.'
+          );
         }
 
       });
-
   }
-
-
-  // =========================
-  // Delete Category
-  // =========================
 
   deleteCategory(id: number): void {
 
@@ -228,18 +144,9 @@ export class Categories implements OnInit {
         'Are you sure you want to delete this category?'
       );
 
-
     if (!confirmed) {
-
       return;
-
     }
-
-
-    this.loading = true;
-
-    this.errorMessage = '';
-
 
     this.categoryService
       .deleteCategory(id)
@@ -247,33 +154,26 @@ export class Categories implements OnInit {
 
         next: () => {
 
-          console.log(
-            'Category deleted'
-          );
-
-
-          // Reload categories
-
-          this.loadCategories();
+          this.categories =
+            this.categories.filter(
+              category =>
+                category.id !== id
+            );
 
         },
 
         error: (error: unknown) => {
 
           console.error(
-            'Error deleting category:',
+            'Failed to delete category:',
             error
           );
 
-          this.loading = false;
-
-          this.errorMessage =
-            'Failed to delete category.';
-
+          alert(
+            'Failed to delete category.'
+          );
         }
 
       });
-
   }
-
 }

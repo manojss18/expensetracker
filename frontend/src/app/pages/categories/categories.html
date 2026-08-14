@@ -1,97 +1,166 @@
 <div class="categories-page">
 
-  <!-- Header -->
+  <!-- HEADER -->
+
   <div class="page-header">
 
     <div>
       <h1>Categories</h1>
 
       <p>
-        Manage your expense categories
+        Organize your expenses into categories
       </p>
     </div>
 
+
+    <button
+      type="button"
+      class="add-category-btn"
+      (click)="openAddForm()">
+
+      <span>+</span>
+
+      Add Category
+
+    </button>
+
   </div>
 
 
-  <!-- Add Category -->
-  <div class="add-category-card">
+  <!-- SUMMARY -->
 
-    <h2>Add Category</h2>
+  <div class="summary-card">
 
-    <div class="add-category-form">
+    <div class="summary-icon">
+      ☷
+    </div>
 
-      <input
-        type="text"
-        placeholder="Enter category name"
-        [(ngModel)]="newCategory"
-        (keyup.enter)="addCategory()"
-      />
+    <div>
 
-      <button
-        class="add-button"
-        type="button"
-        (click)="addCategory()">
+      <span>Total Categories</span>
 
-        + Add Category
+      <h2>
+        {{ categories.length }}
+      </h2>
 
-      </button>
+      <small>
+        Available for your expenses
+      </small>
 
     </div>
 
   </div>
 
 
-  <!-- Categories List -->
-  <div class="category-card">
+  <!-- CATEGORY LIST -->
 
-    <div class="section-header">
+  <div class="categories-card">
+
+    <div class="card-header">
 
       <div>
 
-        <h2>Your Categories</h2>
+        <h2>
+          Your Categories
+        </h2>
 
         <p>
-          {{ categories.length }} categories
+          Manage your personal expense categories
         </p>
 
       </div>
 
+      <span class="category-count">
+        {{ categories.length }}
+      </span>
+
     </div>
+
+
+    @if (categories.length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ☷
+        </div>
+
+        <h3>
+          No categories yet
+        </h3>
+
+        <p>
+          Create your first category to organize your expenses.
+        </p>
+
+        <button
+          type="button"
+          (click)="openAddForm()">
+
+          + Add Category
+
+        </button>
+
+      </div>
+
+    }
 
 
     @if (categories.length > 0) {
 
-      <div class="category-list">
+      <div class="category-grid">
 
         @for (
           category of categories;
           track category.id
         ) {
 
-          <div class="category-item">
+          <div class="category-card">
 
-            <div class="category-info">
+            <div class="category-top">
 
               <div class="category-icon">
-                #
+                {{ category.name.charAt(0).toUpperCase() }}
               </div>
 
-              <span>
-                {{ category.name }}
-              </span>
+
+              <button
+                type="button"
+                class="delete-btn"
+                title="Delete category"
+                (click)="deleteCategory(category.id)">
+
+                ×
+
+              </button>
 
             </div>
 
 
-            <button
-              type="button"
-              class="delete-button"
-              (click)="deleteCategory(category.id)">
+            <div class="category-content">
 
-              Delete
+              <h3>
+                {{ category.name }}
+              </h3>
 
-            </button>
+              <p>
+                Expense category
+              </p>
+
+            </div>
+
+
+            <div class="category-footer">
+
+              <span>
+                Personal
+              </span>
+
+              <span class="active-badge">
+                Active
+              </span>
+
+            </div>
 
           </div>
 
@@ -101,26 +170,102 @@
 
     }
 
-    @else {
+  </div>
 
-      <div class="empty-state">
 
-        <div class="empty-icon">
-          #
+  <!-- ADD CATEGORY MODAL -->
+
+  @if (showForm) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeForm()">
+
+
+      <div
+        class="category-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <h2>
+              Add Category
+            </h2>
+
+            <p>
+              Create a new expense category
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeForm()">
+
+            ×
+
+          </button>
+
         </div>
 
-        <h3>
-          No categories yet
-        </h3>
 
-        <p>
-          Add your first category above.
-        </p>
+        <!-- FORM -->
+
+        <form
+          (ngSubmit)="addCategory()">
+
+
+          <div class="form-group">
+
+            <label>
+              Category Name
+            </label>
+
+            <input
+              type="text"
+              name="category"
+              [(ngModel)]="newCategory"
+              placeholder="e.g. Travel"
+              autocomplete="off">
+
+          </div>
+
+
+          <div class="modal-actions">
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="closeForm()">
+
+              Cancel
+
+            </button>
+
+
+            <button
+              type="submit"
+              class="save-btn">
+
+              Add Category
+
+            </button>
+
+          </div>
+
+        </form>
 
       </div>
 
-    }
+    </div>
 
-  </div>
+  }
 
 </div>
