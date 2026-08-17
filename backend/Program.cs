@@ -3,23 +3,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Controllers
 builder.Services.AddControllers();
 
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
-   options.UseNpgsql(
-    builder.Configuration.GetConnectionString("DefaultConnection")
-)
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
 );
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularApp", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://localhost:4200")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -33,6 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// CORS MUST come before controllers
 app.UseCors("AngularApp");
 
 app.UseHttpsRedirection();
