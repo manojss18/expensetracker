@@ -14,7 +14,7 @@ export class IncomeService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5177/api/income';
+ private apiUrl = 'https://expensetracker-pej6.onrender.com/api/income';
 
   getIncome(): Observable<Income[]> {
     return this.http.get<Income[]>(this.apiUrl);

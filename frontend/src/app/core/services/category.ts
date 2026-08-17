@@ -11,7 +11,7 @@ export class CategoryService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5177/api/categories';
+  private apiUrl = 'https://expensetracker-pej6.onrender.com/api/categories';
 
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiUrl);

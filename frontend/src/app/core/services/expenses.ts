@@ -14,7 +14,7 @@ export class ExpenseService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5177/api/expenses';
+private apiUrl = 'https://expensetracker-pej6.onrender.com/api/expenses';
 
   getExpenses(): Observable<Expense[]> {
     return this.http.get<Expense[]>(this.apiUrl);
