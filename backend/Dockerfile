@@ -18,6 +18,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_URLS=http://+:10000
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 
 EXPOSE 10000
 
